@@ -1,0 +1,36 @@
+*,p {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-size: 14px;
+}
+
+body {
+	background-color: #fff;
+	color: #172B4D;
+	line-height: 20px;
+}
+
+div {
+	box-sizing: border-box;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+li {
+	display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+a {
+	text-decoration: none;
+}
+
+.hide {
+	display: none;
+}

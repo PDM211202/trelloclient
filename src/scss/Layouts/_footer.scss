@@ -1,0 +1,21 @@
+.footer {
+    background: $bg-1;
+    padding: $pd-3;
+    text-align: center;
+    font-size: $font-size-small;
+    font-weight: $font-weight-600;
+
+    .footer_nav {
+        .nav-item {
+            list-style: none;
+            .nav-link {
+                color: $color-white;
+            }
+        }
+        .active {
+            .nav-link {
+                color: $color-orange;
+            }
+        }
+    }
+}

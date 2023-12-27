@@ -1,0 +1,18 @@
+//----------Base------------
+@import "Base/_reset.scss";
+@import "Base/_normalize.scss";
+
+//----------Helpers------------
+@import "Helpers/_variable.scss";
+@import "Helpers/_function.scss";
+@import "Helpers/_mixin.scss";
+
+//----------Layouts------------
+@import "Layouts/_header.scss";
+@import "Layouts/_footer.scss";
+
+//----------Pages------------
+@import "Pages/_login.scss";
+@import "Pages/_home.scss";
+@import "Pages/_info.scss";
+@import "Pages/_genre.scss"
