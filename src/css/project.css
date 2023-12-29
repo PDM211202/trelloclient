@@ -1,0 +1,768 @@
+*,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 14px;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+span {
+    font-size: 12px;
+}
+
+.hide {
+    display: none;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: right;
+    font-size: 12px;
+}
+
+.overlay i {
+    width: 31px;
+    height: 31px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 31px;
+    margin-top: 5px;
+    margin-right: 5px;
+    display: none;
+}
+
+.overlay:hover i {
+    display: inline-block;
+}
+
+.header {
+    height: 48px;
+}
+
+.menu {
+    max-width: 260px;
+    background-color: hsla(221, 73.6%, 47.5%, 0.6);
+    height: 100vh;
+}
+
+.menu__header {
+    padding: 8px 12px 8px;
+    font-size: 14px;
+    display: flex;
+}
+
+.menu__header__left {
+    width: 20%;
+}
+
+.menu__header__left img {
+    width: 36px;
+    height: 36px;
+}
+
+.menu__header__mid {
+    width: 60%;
+}
+.menu__header__right {
+    width: 20%;
+    position: relative;
+}
+
+.menu__header__right div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.menu__header__right div:hover {
+    background-color: #9fadbc;
+}
+
+.menu__header__right div i {
+    line-height: 28px;
+    color: white;
+}
+
+.menu__mid__item {
+    display: flex;
+    padding: 0 16px;
+    height: 32px;
+}
+
+.menu__mid__item:hover {
+    background-color: hsla(0, 0%, 100%, 0.16);
+}
+
+.menu__mid__item i {
+    line-height: 32px;
+    width: 32px;
+    text-align: center;
+}
+
+.menu__mid__item span {
+    width: 67%;
+    line-height: 32px;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.menu__mid__item .user__add {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    margin-top: 2px;
+}
+
+.menu__mid__item .user__add:hover {
+    background-color: hsla(0, 0%, 100%, 0.16);
+    color: white;
+}
+
+.menu__bottom {
+    height: 32px;
+}
+
+.menu__bottom__title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 32px;
+    padding: 0 10px;
+}
+
+.menu__bottom__title i {
+    line-height: 28px;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.menu__bottom__title i:hover {
+    background-color: #9fadbc;
+    color: white;
+}
+
+.list-group-item-p {
+    background-color: hsla(221, 73.6%, 47.5%, 0.2);
+    position: relative;
+    padding: 10px 20px;
+}
+
+.menu__bottom .list-group-item-p {
+    color: #fff;
+    border: none;
+}
+
+.menu__bottom .list-group-item-p a {
+    text-decoration: none;
+    color: #fff;
+}
+.content__bar {
+    background-color: #0000003d;
+    padding: 10px 12px 10px 16px;
+    height: 58px;
+    color: white;
+}
+
+.content__bar__left span {
+    font-size: 18px;
+    line-height: 38px;
+    padding: 0 12px;
+}
+
+.content__bar__left button {
+    line-height: 30px;
+    width: 32px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #00000000;
+    border: 1px solid #a6c5e229;
+    color: white;
+    font-size: 12px;
+}
+
+.content__bar__left button:hover {
+    background-color: #0000003d;
+}
+
+.content__main {
+    padding: 14px 8px;
+    display: flex;
+}
+
+.card {
+    margin: 0 6px;
+    background-color: #ebecf0;
+    border-radius: 10px;
+    color: #172b4d;
+}
+
+.card__header {
+    display: flex;
+}
+
+.card__header i {
+    line-height: 28px;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+}
+
+.card__content .list-group-item {
+    background-color: #fff;
+    color: #172b4d;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.card__bottom {
+    border: 1px solid #ebecf0;
+}
+
+.card__bottom button {
+    width: 100%;
+    background: #ebecf0;
+    border: 1px solid #ebecf0;
+    color: #172b4d;
+    text-align: left;
+    padding: 1px 0;
+}
+
+.card__bottom button:hover {
+    background: #091e4224;
+    border-radius: 10px;
+}
+
+.card__bottom span {
+    font-size: 14px;
+}
+
+.card__bottom i {
+    line-height: 28px;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+}
+
+.card__bottom .add_task input {
+    width: 100%;
+    border-radius: 10px;
+    height: 40px;
+    padding: 4px 8px;
+    margin-bottom: 10px;
+}
+
+.add_option {
+    height: 35px;
+    display: flex;
+}
+
+.card__bottom .add_task .btn_add {
+    width: 35%;
+    height: 32px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.card__bottom .add_task .btn_close {
+    width: 32px;
+    height: 32px;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.card__bottom .add_task .btn_close:hover {
+    background-color: #9fadbc;
+}
+
+.card__bottom .add_task .btn_close i {
+    font-size: 16px;
+    line-height: 35px;
+    color: #000;
+}
+
+/* Ẩn phần tử đang được kéo để tạo hiệu ứng "lifting" */
+.hidden {
+    display: none;
+}
+
+/* Thiết kế cho placeholder của list-group-item */
+.list-group .placeholder {
+    border: 2px dashed #ccc;
+    min-height: 40px;
+    background-color: #f8f9fa;
+    box-sizing: border-box;
+}
+
+/* Thiết kế cho placeholder của card */
+.content__main .placeholder-card {
+    border: 2px dashed #ccc;
+    min-height: 100px;
+    margin-bottom: 10px; /* Giả sử có margin giữa các card */
+    box-sizing: border-box;
+}
+
+/* Tùy chỉnh cho các list-group-item và card khi đang được kéo */
+.list-group-item:active,
+.card:active {
+    cursor: grabbing;
+    opacity: 0.7; /* Tạo hiệu ứng nhẹ khi đang kéo */
+}
+
+/* Có thể thêm các style khác để cải thiện trải nghiệm người dùng */
+
+/* Thiết kế cho card đang được kéo */
+.card.hidden {
+    opacity: 0.5; /* Làm mờ card để biểu thị nó đang được kéo */
+}
+
+/* Thiết kế cho placeholder của card */
+.placeholder-card {
+    width: 19rem;
+    min-height: 100px; /* Đặt chiều cao tối thiểu */
+    margin-bottom: 15px; /* Khoảng cách dưới cùng */
+    box-sizing: border-box;
+}
+
+/* Thêm một số hiệu ứng khi kéo */
+.card.dragging {
+    cursor: grabbing;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ nhẹ */
+}
+
+/* Đảm bảo rằng card đang được kéo được hiển thị ở trên cùng */
+.card.dragging {
+    position: absolute;
+    z-index: 1000;
+}
+
+.list-group-item-p.hover-active {
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.37
+    ); /* Màu nền cho hiệu ứng hover */
+}
+
+.list-group-item-p.active {
+    background-color: #ffffff5e; /* Màu nền cho item active */
+    color: white; /* Màu chữ cho item active */
+}
+
+
+
+.modal-dialog {
+    max-width: 770px;
+}
+
+#TodoListModal .modal-content {
+    background-color: #ebecf0;
+    color: #172B4D;
+}
+
+#TodoListModal .modal-header {
+    border: none;
+    position: relative;
+}
+
+.TodoList_name {
+    position: absolute;
+    top: 17px ;
+    left: 20px;
+    background: #0000;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    font-weight: 600;
+    height: 32px;
+    line-height: 24px;
+    margin: -6px -10px;
+    min-height: 24px;
+    padding: 6px 10px;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    width: 80%;
+}
+
+.TodoList_name:focus {
+    background-color: #fff;
+}
+
+.modal-body .body_left {
+    width: 70%;
+}
+
+.modal-body .body_right{
+    width: 30%;
+}
+
+.description .description__title {
+    width: 100%;
+    height: 50px;
+}
+
+.description .description__title i, H5 {
+    font-size: 16px;
+    line-height: 50px;
+    margin: 0 10px;
+}
+
+.description .description__content .description__add {
+    background-color: #091e420f;
+    box-shadow: none;
+    border: none;
+    font-weight: 500;
+    border-radius: 3px;
+    color: #172b4d;
+    height: 50px;
+    padding: 8px 12px;
+    text-decoration: none;
+    width: 90%;
+    margin-left: 40px;
+    margin-bottom: 10px;
+}
+
+.description .description__content .description_text {
+    width: 90%;
+    height: 220px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+    padding: 6px 12px;
+    display: block;
+}
+
+.description .description__content button:first-of-type {
+    margin-left: 40px;
+}
+.body_right span {
+    display: block;
+    color: #44546f;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: -4px;
+    margin-top: 16px;
+}
+
+.body_right .body_item {
+    position: relative;
+    display: flex;
+    color: #44546f;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: -4px;
+    margin-top: 16px;
+    background-color: #091e420f;
+    padding: 10px 10px;
+    cursor: pointer;
+}
+
+.body_right .body_item i {
+    line-height: 20px;
+    margin-right: 8px;
+}
+
+.modal-show {
+    margin-left: 55px;
+}
+
+.modal-show .modal-user {
+    margin-right: 15px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.user-avatar img {
+    width: 100%;
+    border-radius: 50%;
+}
+.modal-show .user-show .user-avatar i {
+    font-size: 16px;
+    line-height: 32px;
+}
+
+.todo_item {
+    position: none;
+}
+
+.todolist .todolist-header .todolist_title {
+    height: 50px;
+}
+
+
+.todolist .todolist-header .todolist_title h5 {
+    font-size: 16px;
+    line-height: 50px;
+    margin: 0 10px;
+}
+
+.todolist .todolist-header .todolist_option .hide_todo, .delete_todolist {
+    height: 32px;
+    background-color: #091e420f;
+    margin-right: 12px;
+    padding: 0 10px;
+    line-height: 32px;
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.todolist .progress_per {
+    height: 32px;
+}
+
+.todolist .progress_per span {
+    font-size: 12px;
+    margin: 0 10px;
+}
+
+.todolist .progress_per .progress_persen {
+    width: 89%;
+    display: inline-block;
+    height: 8px;
+    background-color: #091e420f;
+    border-radius: 5px;
+}
+
+.todolist .progress_per .progress_persen .persen {
+    background-color: #0d6efd;
+    width: 50%;
+    height: 8px;
+    border-radius: 5px;
+}
+
+.todolist .form-check {
+    margin: 0 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.todolist .form-check .form-check-label {
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+.btn_addtodo {
+    background-color: #091e420f;
+    margin: 10px;
+}
+
+.todo_info textarea{
+    overflow: hidden;
+    overflow-wrap: break-word;
+    height: 56px;
+    background-color: #fff;
+    box-shadow: inset 0 0 0 2px #388bff;
+    color: var(--ds-text,#172b4d);
+    cursor: text;
+    float: none;
+    resize: vertical;
+    width: 96%;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.todo_btn {
+    margin-left: 10px;
+}
+
+.comment {
+    margin: 20px 10px;
+}
+
+.add_comment input {
+    box-shadow:  0px 1px 1px #091e4240;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+    color: #172b4d;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    margin-left: 8px;
+    width: 90%;
+    padding: 4px 10px;
+}
+
+.add_comment button {
+    margin-left: 10px;
+    border-radius: 8px;
+}
+
+.comment_content .comment_item {
+    margin-left: 8px;
+    width: 90%;
+}
+
+.comment_content .comment_item label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #172b4d;
+    line-height: 20px;
+}
+
+.comment_content .comment_item span {
+    color: #44546f;
+}
+
+.comment_user {
+    box-shadow:  0px 1px 1px #091e4240;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+    color: #172b4d;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    width: 100%;
+    padding: 6px 10px;
+    background-color: #fff;
+}
+
+.comment_option {
+    margin-top: 4px;
+}
+
+.comment_option span{
+    font-size: 12px;
+    margin: 8px;
+    cursor: pointer;
+}
+
+.update_comment {
+    display: none;
+}
+
+#update_comment {
+    width: 100%;
+    border-color: #0d6efd;
+    height: 70px;
+}
+
+.form-check {
+    position: relative;
+}
+
+.form-check-label {
+    display: inline-block;
+    line-height: 24px;
+    padding: 5px;
+}
+
+.btn-update-todo {
+    font-size: 14px;
+    background-color: #091e420f;
+    border-radius: 5px;
+    padding: 4px 8px;
+    position: absolute;
+    right: 0;
+}
+
+.update_todo {
+    background-color: #091e420f;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+
+
+#update_todo {
+    width: 100%;
+    border-color: #0d6efd;
+    height: 60px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.add_user, .create_todo {
+    position: absolute;
+    width: 300px;
+    background: #fff;
+    z-index: 1;
+    top: 120%;
+    left: 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: none;
+}
+
+.add_user .add_user_title, .create_todo_title {
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.add_user input , .create_todo input{
+    margin: 4px 0 12px;
+    width: 100%;
+    padding: 4px 8px;
+}
+
+.add_user p {
+    color: #44546f;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    margin: 10px 0;
+}
+
+.list_user {
+    border-radius: 3px;
+    color: #172b4d;
+    display: block;
+    line-height: 32px;
+    margin-bottom: 2px;
+    overflow: hidden;
+    padding: 4px;
+    position: relative;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.list_user .user_name {
+    line-height: 32px;
+    margin: 0;
+    font-size: 14px;
+}
+
+.added {
+    background-color: #091e4224;
+}

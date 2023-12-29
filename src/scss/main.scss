@@ -2,6 +2,8 @@
 @import "Base/_reset.scss";
 @import "Base/_normalize.scss";
 
+//----------Components------------
+@import "Components/_trello.scss";
 //----------Helpers------------
 @import "Helpers/_variable.scss";
 @import "Helpers/_function.scss";
@@ -14,5 +16,6 @@
 //----------Pages------------
 @import "Pages/_login.scss";
 @import "Pages/_home.scss";
-@import "Pages/_info.scss";
+@import "Pages/_workspace.scss";
+@import "Pages/_project.scss";
 @import "Pages/_genre.scss"

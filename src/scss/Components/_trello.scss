@@ -1,0 +1,19 @@
+.line {
+    width: 100%;
+    height: 1px;
+    background-color: #091e4224;
+    margin: 10px 0;
+}
+
+.setting_option_item {
+    position: relative;
+    button {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+.hidden {
+    display: none;
+}

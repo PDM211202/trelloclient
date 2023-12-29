@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Route } from 'react-router-dom';
-import Header from '../../layouts/Header/Header'
+import Header from '../../layouts/Header/Header1'
 import Footer from '../../layouts/Footer/Footer'
 
 export default function HomeTemplates(props) {
