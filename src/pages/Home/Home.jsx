@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateProjectApi, MemberAllApi, WorkspaceApi, MemberApi, BackgroundApi, ProjectApi, setProjectId, setWsId } from '../../redux/reducer/trelloReducer';
+import { CreateWorkspaceApi, CreateProjectApi, MemberAllApi, WorkspaceApi, MemberApi, BackgroundApi, ProjectApi, setProjectId, setWsId } from '../../redux/reducer/trelloReducer';
 import { NavLink } from 'react-router-dom';
 
 
@@ -9,11 +9,23 @@ export default function Home() {
     const [showDropdown, setShowDropdown] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [currentBg, setCurrentBg] = useState();
-    const [projectTitle, setProjectTitle] = useState("");
+    const [projectTitle, setProjectTitle] = useState("")
     const [projectStatus, setProjectStatus] = useState("Không gian làm việc");
     const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(``);
 
-    console.log("currentBg", workspace);
+    const [workspaceName, setWorkspaceName] = useState('');
+    const [workspaceDescription, setWorkspaceDescription] = useState('');
+
+
+    const handleNameChange = (e) => {
+        setWorkspaceName(e.target.value);
+    };
+
+    const handleDescriptionChange = (e) => {
+        setWorkspaceDescription(e.target.value);
+    };
+
+
 
 
     const handleBgChange = (newBg) => {
@@ -82,6 +94,11 @@ export default function Home() {
     }, [showModal]);
 
     const dispatch = useDispatch();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(CreateWorkspaceApi(workspaceName, workspaceDescription, user.user_id, wsId));
+    };
 
     useEffect(() => {
         const actionBackground = BackgroundApi()
@@ -389,26 +406,6 @@ export default function Home() {
         })
     }
 
-    const renderWorkspaceModal = () => {
-        return <div className="modal fade" id="createProjectModal" tabIndex={-1} aria-labelledby="createProjectModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="createProjectModalLabel">Modal title</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                    </div>
-                    <div className="modal-body">
-                        ...
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
     return (
         <div className='container'>
             <div className='home row'>
@@ -439,7 +436,7 @@ export default function Home() {
                         <ul className='list-workspace'>
                             <div className="list-workspace-title">
                                 Các không gian làm việc
-                                <i className="fa fa-plus"></i>
+                                <i className="fa fa-plus" data-bs-toggle="modal" data-bs-target="#WorkSpaceModal"></i>
                             </div>
                             {renderListWorkspace()}
                         </ul>
@@ -449,6 +446,31 @@ export default function Home() {
                     <div>
                         <h3 className='workspace-page-header'>CÁC KHÔNG GIAN LÀM VIỆC CỦA BẠN</h3>
                         {renderWorkspaceContent()}
+                    </div>
+                </div>
+            </div>
+
+            <div className="modal fade" id="WorkSpaceModal" tabIndex=" - 1" aria-labelledby="WorkSpaceModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div className="modal-body">
+                            <form onSubmit={handleSubmit}>
+                                <h3>Hãy xây dựng một không gian làm việc</h3>
+                                <p>Tên không gian làm việc</p>
+                                <input type="text" name="working_space_name" value={workspaceName} onChange={handleNameChange} placeholder="Công ty của ..." />
+                                <span>Đây là tên công ty, nhóm hoặc tổ chức của bạn.</span>
+                                <p>Mô tả không gian làm việc</p>
+                                <textarea name="working_space" value={workspaceDescription} onChange={handleDescriptionChange} rows={10} defaultValue={""} />
+                                <span>Đưa các thành viên của bạn vào bảng với mô tả ngắn về Không gian làm việc của bạn.</span>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" className="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,69 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { WorkspaceApi, TaskApi, WorkApi, setProjectId, ProjectApi } from '../../redux/reducer/trelloReducer';
+import { CreateTaskApi, CreateWorkApi, UpdateProjectNameApi, WorkspaceApi, TaskApi, WorkApi, setProjectId, ProjectApi } from '../../redux/reducer/trelloReducer';
 import { NavLink } from 'react-router-dom';
 
 export default function Project() {
+    const dispatch = useDispatch();
     const { wsId, user, work, project, projectId, task } = useSelector(state => state.trelloReducer)
     const [showAddTask, setShowAddTask] = useState({});
+    const [showForm, setShowForm] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+    const [isAtEnd, setIsAtEnd] = useState(false);
+
+    const [projectName, setProjectName] = useState("");
+    const [editing, setEditing] = useState(false);
+
+    const [workName, setWorkName] = useState('');
+
+    const [taskName, setTaskName] = useState('');
+
+    const handleAddTask = async (wId) => {
+        dispatch(CreateTaskApi(wId, taskName));
+        setShowAddTask({ ...showAddTask, [wId]: false });
+        setTaskName("")
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch(CreateWorkApi(projectId, workName));
+        setShowForm(false);
+        setWorkName('');
+    };
+
+    const handleShowInput = () => {
+        setEditing(true);
+    };
+
+    const handleHideInput = async (project_id) => {
+        dispatch(UpdateProjectNameApi(project_id, projectName));
+        setEditing(false);
+    };
+
+    const handleScroll = (e) => {
+        const element = e.target;
+        if (element.scrollWidth - element.scrollLeft === element.clientWidth) {
+            setIsAtEnd(true); // Người dùng đã cuộn đến cuối
+        }
+    };
+
+    useEffect(() => {
+        const cardsContainer = document.querySelector('.content__main');
+        cardsContainer.addEventListener('scroll', handleScroll);
+
+        return () => {
+            cardsContainer.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const handleShowMenu = () => {
+        setShowMenu(true);
+    };
+
+    const handleHideMenu = () => {
+        setShowMenu(false);
+    };
+
 
     const handleShowClick = (workId) => {
         setShowAddTask({ ...showAddTask, [workId]: true });
@@ -13,6 +71,7 @@ export default function Project() {
 
     const handleCloseClick = (workId) => {
         setShowAddTask({ ...showAddTask, [workId]: false });
+        setTaskName("");
     };
 
     const handleSetProjectId = (projectId) => {
@@ -20,7 +79,15 @@ export default function Project() {
         dispatch(actionSetProjectId)
     }
 
-    const dispatch = useDispatch();
+    const handleShowForm = () => {
+        setShowForm(true);
+    };
+
+    const handleHideForm = () => {
+        setShowForm(false);
+        setWorkName('');
+    };
+
     useEffect(() => {
         const actionWork = WorkApi()
         dispatch(actionWork)
@@ -64,7 +131,7 @@ export default function Project() {
     const renderListCard = (pId) => {
         return work.map((w, index) => {
             if (pId == w.project_id) {
-                return <div key={index} className="card" draggable="true" data-drop-target-for-element="true" work-position style={{ width: '19rem' }}>
+                return <div key={index} className="card" draggable="true" data-drop-target-for-element="true" work-position style={{ width: '19rem', display: "inline-block" }}>
                     <div className="card-body">
                         <div className="card__header">
                             <h5 className="card-title" style={{ width: '86%' }}>{w.work_name}</h5>
@@ -79,9 +146,10 @@ export default function Project() {
                             {showAddTask[w.work_id] ? (
                                 <div className="add_task">
                                     <form method="post">
-                                        <input id="task_name" type="text" placeholder="Nhập tiêu đề cho thẻ này" />
+                                        <input id="task_name" type="text" value={taskName}
+                                            onChange={(e) => setTaskName(e.target.value)} placeholder="Nhập tiêu đề cho thẻ này" />
                                         <div className="add_option">
-                                            <button className="btn btn-primary btn_add" onClick={() => handleCloseClick(w.work_id)}>Thêm
+                                            <button className="btn btn-primary btn_add" onClick={() => handleAddTask(w.work_id)}>Thêm
                                                 thẻ</button>
                                             <div className="btn_close" onClick={() => handleCloseClick(w.work_id)}>
                                                 <i className="fa fa-times" />
@@ -102,26 +170,59 @@ export default function Project() {
         })
     }
 
+    const renderCreateWork = () => {
+        return <div>
+            {!showForm && (
+                <div
+                    className="create_work"
+                    style={{ cursor: "pointer", backgroundColor: "#ffffff54", width: "244px", padding: "10px 20px", borderRadius: "10px", fontWeight: "500", color: "#fff" }}
+                    onClick={handleShowForm}>
+                    <i class="fa fa-plus me-2"></i>
+                    Thêm danh sách khác
+                </div>
+            )}
+            {showForm && (
+                <div style={{ width: "264px", borderRadius: "10px", backgroundColor: "#fff", padding: "10px" }}>
+                    <form onSubmit={handleSubmit}>
+                        <input value={workName}
+                            onChange={(e) => setWorkName(e.target.value)} style={{ width: "100%", padding: "10px", borderRadius: "10px" }} type="text" placeholder='Nhập tiêu đề cho danh sách' />
+                        <button type="submit" className='btn btn-primary mt-2 me-2'>Thêm</button>
+                        <button type="button" className="btn btn-primary mt-2" onClick={handleHideForm}>Hủy</button>
+                    </form>
+                </div>
+            )}
+        </div>
+    }
+
     const renderProjectContent = (pId) => {
         return project.map((p, index) => {
-            if (p.project_id == pId) {
+            if (p.project_id === parseInt(pId)) {
                 return <div className="content m-0 col p-0">
                     <div className="content__bar">
-                        <div className="content__bar__left">
-                            <span>{p.project_name}</span>
+                        <div style={{ position: "relative" }} className="content__bar__left ">
+                            {!editing ? (
+                                <span className='project_name_show' onClick={handleShowInput}>{p.project_name}</span>
+                            ) : (
+                                <input style={{ width: "20%", color: "#000" }} type="text" className='project_name p-2 me-2 ' name="project_name" value={projectName}
+                                    onChange={(e) => setProjectName(e.target.value)}
+                                    onBlur={() => { handleHideInput(p.project_id) }} />
+                            )}
                             <button type="button">
                                 <i className="fa fa-star" />
                             </button>
                             <button type="button">
                                 <i className="fa fa-user-friends" />
                             </button>
-                        </div>
-                        <div className="content__bar__right">
+                            {!showMenu && (
+                                <div onClick={handleShowMenu} style={{ top: "50%", cursor: "pointer", right: "10px", transform: "translateY(-50%)", position: "absolute", width: "32px", height: "32px", textAlign: "center" }} className="menu_show">
+                                    <i style={{ lineHeight: "32px" }} className="fa fa-list"></i>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className="content__main">
+                    <div style={{ maxWidth: "1091px" }} className="content__main">
                         {renderListCard(p.project_id)}
-                        
+                        {renderCreateWork()}
                     </div>
                     <div className="modal fade" id="TodoListModal" tabIndex={-1} aria-labelledby="TodoListModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
@@ -415,7 +516,7 @@ export default function Project() {
                         </NavLink>
                         <NavLink style={{ color: "#fff" }} to="/workspacemanager">
                             <div className="menu__mid__item">
-                                <i className="fa fa-user" />
+                                <i className="fa fa-user"/>
                                 <span>Thành viên</span>
                                 <i className="fa fa-plus user__add" />
                             </div>
@@ -438,7 +539,50 @@ export default function Project() {
                     </div>
                 </nav>
                 {renderProjectContent(projectId)}
-            </div >
-        </div >
+                {showMenu && (
+                    <div className="project_option col-2">
+                        <div className="project_option_header">
+                            <h3 className='project_option_header_title'>Menu</h3>
+                            <div className="project_option_close" onClick={handleHideMenu}>
+                                <i class="fa fa-times"></i>
+                            </div>
+                        </div>
+                        <div className="line"></div>
+                        <div className="project_option_content">
+                            <div className="project_option_content_item d-flex">
+                                <div className="project_option_content_item_logo">
+                                    <i class="fa fa-info-circle"></i>
+                                </div>
+                                <div className="project_option_content_item_description">
+                                    <p>Về bảng này</p>
+                                    <span>Thêm mô tả vào bảng</span>
+                                </div>
+                            </div>
+                            <div className="project_option_content_item d-flex">
+                                <div className="project_option_content_item_logo">
+                                    <i class="fa fa-cog"></i>
+                                </div>
+                                <div className="project_option_content_item_setting">
+                                    <p>Cài đặt</p>
+                                </div>
+                            </div>
+                            <div className="project_option_content_item d-flex">
+                                <div className="project_option_content_item_logo">
+                                    <i class="fa fa-cog"></i>
+                                </div>
+                                <div className="project_option_content_item_setting">
+                                    <p>Thay đổi hình nền</p>
+                                </div>
+                            </div>
+                            <div className="project_option_content_item">
+                                <div className="project_option_content_item_delete">
+                                    <p style={{ color: "red" }} className='ms-5'>Xóa bảng</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
     )
 }

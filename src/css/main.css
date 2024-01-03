@@ -657,6 +657,7 @@ a {
   position: fixed;
   inset: 52px auto auto 68%;
   width: 304px;
+  z-index: 1000;
 }
 .create_project .create_project_header {
   padding: 4px 8px;
@@ -870,6 +871,59 @@ a {
 .create_project .create_project_content .active {
   background-color: #0c66e4;
   color: #fff;
+}
+
+.project .project_option {
+  width: 300px;
+  background-color: var(--ds-surface-overlay, #fff);
+  color: #000;
+}
+.project .project_option .project_option_header {
+  position: relative;
+}
+.project .project_option .project_option_header .project_option_header_title {
+  text-align: center;
+  font-size: 18px;
+  line-height: 56px;
+}
+.project .project_option .project_option_header .project_option_close {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.project .project_option .project_option_header .project_option_close i {
+  line-height: 32px;
+}
+.project .project_option .project_option_header .project_option_close:hover {
+  background-color: var(--ds-background-neutral-subtle-hovered, rgba(9, 30, 66, 0.0588235294));
+}
+.project .project_option .project_option_content .project_option_content_item {
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+.project .project_option .project_option_content .project_option_content_item .project_option_content_item_logo {
+  margin-right: 10px;
+  padding: 5px 10px;
+}
+.project .project_option .project_option_content .project_option_content_item .project_option_content_item_logo i {
+  font-size: 16px;
+}
+.project .project_option .project_option_content .project_option_content_item .project_option_content_item_description p {
+  line-height: 20px;
+  padding: 5px 0;
+}
+.project .project_option .project_option_content .project_option_content_item .project_option_content_item_setting p {
+  line-height: 20px;
+  padding: 5px 0;
+}
+.project .project_option .project_option_content .project_option_content_item:hover {
+  background-color: var(--ds-background-neutral-subtle-hovered, rgba(9, 30, 66, 0.0588235294));
 }
 
 .genre .des {

@@ -1,16 +1,71 @@
 .project {
     .menu {
-
     }
     .menu__header {
         .menu__header__left {
-
         }
         .menu__header__mid {
-
         }
         .menu__header__right {
-            
+        }
+    }
+
+    .project_option {
+        width: 300px;
+        background-color: var(--ds-surface-overlay, #fff);
+        color: #000;
+        .project_option_header {
+            position: relative;
+            .project_option_header_title {
+                text-align: center;
+                font-size: 18px;
+                line-height: 56px;
+            }
+            .project_option_close {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
+                width: 32px;
+                height: 32px;
+                border-radius: 5px;
+                text-align: center;
+                cursor: pointer;
+                i {
+                    line-height: 32px;
+                }
+                &:hover {
+                    background-color: var(--ds-background-neutral-subtle-hovered, #091e420f);
+                }
+            }
+        }
+        .project_option_content {
+            .project_option_content_item {
+                border-radius: 10px;
+                padding: 5px 10px;
+                .project_option_content_item_logo {
+                    margin-right: 10px;
+                    padding: 5px 10px;
+                    i {
+                        font-size: 16px;
+                    }
+                }
+                .project_option_content_item_description {
+                    p {
+                        line-height: 20px;
+                        padding: 5px 0;
+                    }
+                }
+                .project_option_content_item_setting {
+                    p {
+                        line-height: 20px;
+                        padding: 5px 0;
+                    }
+                }
+                &:hover {
+                    background-color: var(--ds-background-neutral-subtle-hovered, #091e420f);
+                }
+            }
         }
     }
 }

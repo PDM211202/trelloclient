@@ -278,7 +278,7 @@ export const UpdateWorkspacePublicApi = (wsId, status) => {
         }
       });
       if (response.data) {
-        dispatch(setProject(response.data));
+        dispatch(setWorkspace_manager(response.data));
       }
     } catch (error) {
       console.error(error);
@@ -300,7 +300,7 @@ export const UpdateWorkspaceProtectedApi = (wsId, status) => {
         }
       });
       if (response.data) {
-        dispatch(setProject(response.data));
+        dispatch(setWorkspace_manager(response.data));
       }
     } catch (error) {
       console.error(error);
@@ -322,7 +322,252 @@ export const UpdateWorkspacePrivateApi = (wsId, status) => {
         }
       });
       if (response.data) {
+        dispatch(setWorkspace_manager(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const CreateWorkspaceApi = (ws_name, ws_description, user_id, ws_id) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('working_space_name', ws_name);
+      formData.append('working_space_description', ws_description);
+      formData.append('working_space_description', ws_id);
+      formData.append('user_id', user_id);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkspaceApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWorkspace(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const AddMemberApi = (user_email, ws_id) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('user_email', user_email);
+      formData.append('working_space_id', ws_id);
+
+      const response = await axios.post('http://localhost:8080/itad/api/MemberApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setMember_user(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const UpdateWorkspaceDeletePublicApi = (wsId, status) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('working_space_id', wsId);
+      formData.append('working_space_delete_public', status);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkspaceApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWorkspace_manager(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const UpdateWorkspaceDeleteProtectedApi = (wsId, status) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('working_space_id', wsId);
+      formData.append('working_space_delete_protected', status);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkspaceApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWorkspace_manager(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const UpdateWorkspaceDeletePrivateApi = (wsId, status) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('working_space_id', wsId);
+      formData.append('working_space_delete_private', status);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkspaceApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWorkspace_manager(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const UpdateProjectNameApi = (pId, pName) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('project_id', pId);
+      formData.append('project_name', pName);
+
+      const response = await axios.post('http://localhost:8080/itad/api/ProjectApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
         dispatch(setProject(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const CreateWorkApi = (pId, wName) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('project_id', pId);
+      formData.append('work_name', wName);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWork(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const CreateTaskApi = (wId, tName) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('work_id', wId);
+      formData.append('task_name', tName);
+
+      const response = await axios.post('http://localhost:8080/itad/api/TaskApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setTask(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const DeleteMemberApi = (mu) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('member_id', mu.member_id);
+      formData.append('delete_member', mu.member_id);
+      formData.append('working_space_id', mu.working_space_id);
+
+      const response = await axios.post('http://localhost:8080/itad/api/MemberApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setMember(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const DeleteWorkspaceApi = (ws) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('working_space_id', ws.working_space_id);
+      formData.append('delete_member', ws.working_space_id);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkspaceApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWorkspace(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const UpdateWorkspaceNameApi = (ws) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('working_space_id', ws.working_space_id);
+      formData.append('working_space_name', ws.working_space_name);
+      formData.append('update_name', ws.working_space_name);
+      const response = await axios.post('http://localhost:8080/itad/api/WorkspaceApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWorkspace(response.data));
       }
     } catch (error) {
       console.error(error);
