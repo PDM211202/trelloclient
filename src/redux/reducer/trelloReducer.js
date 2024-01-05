@@ -17,6 +17,7 @@ const initialState = {
   member_user: [],
   background: [],
   member_all: [],
+  member_login: {}
 }
 
 const trelloReducer = createSlice({
@@ -64,11 +65,15 @@ const trelloReducer = createSlice({
     },
     setMember_all: (state, action) => {
       state.member_all = action.payload;
+    },
+    setMember_login: (state, action) => {
+      const filteredMembers = state.member.filter(mb => mb.user_id === state.user.user_id);
+      state.member_login = filteredMembers[0];
     }
   }
 });
 
-export const { setMember_all, setBackground, setMember_user, setMember, setWork, setLogin, setUser, setWorkspace, setProject, setWorkspace_manager, setWsId, setProjectId, setTask } = trelloReducer.actions
+export const { setMember_login, setMember_all, setBackground, setMember_user, setMember, setWork, setLogin, setUser, setWorkspace, setProject, setWorkspace_manager, setWsId, setProjectId, setTask } = trelloReducer.actions
 
 export default trelloReducer.reducer
 
@@ -486,6 +491,29 @@ export const CreateWorkApi = (pId, wName) => {
   };
 };
 
+export const UpdateWorkNameApi = (work_id, wName) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('work_id', work_id);
+      formData.append('work_name', wName);
+      formData.append('update_work_name', wName);
+
+      const response = await axios.post('http://localhost:8080/itad/api/WorkApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setWork(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 export const CreateTaskApi = (wId, tName) => {
   return async dispatch => {
     try {
@@ -568,6 +596,51 @@ export const UpdateWorkspaceNameApi = (ws) => {
       });
       if (response.data) {
         dispatch(setWorkspace(response.data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const UpdateMemberRoleApi = (ws, role) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('member_id', ws.member_id);
+      formData.append('working_space_id', ws.working_space_id);
+      formData.append('user_roles', role);
+      const response = await axios.post('http://localhost:8080/itad/api/MemberApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setMember(response.data));
+      }
+      console.log("api", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const GetMemberRoleApi = (uId, wsId) => {
+  return async dispatch => {
+    try {
+      // Tạo dữ liệu form
+      const formData = new URLSearchParams();
+      formData.append('user_id', uId);
+      formData.append('working_space_id', wsId);
+      formData.append('get_member', "1");
+      const response = await axios.post('http://localhost:8080/itad/api/MemberApi', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      if (response.data) {
+        dispatch(setMember(response.data));
       }
     } catch (error) {
       console.error(error);

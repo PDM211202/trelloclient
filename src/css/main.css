@@ -873,6 +873,61 @@ a {
   color: #fff;
 }
 
+.btn_update_member_role {
+  position: relative;
+}
+
+.update_member_role {
+  z-index: 1000;
+  background-color: #fff;
+  text-align: left;
+  position: absolute;
+  line-height: 32px;
+  top: 50px;
+  width: 300px;
+  height: 290px;
+  box-shadow: #626f86;
+}
+.update_member_role h4 {
+  text-align: center;
+  box-sizing: border-box;
+  color: var(--ds-text, #172b4d);
+  color: var(--ds-text-subtle, #44546f);
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  grid-column: 1/span 3;
+  grid-row: 1;
+  height: 40px;
+  letter-spacing: -0.003em;
+  line-height: 16px;
+  line-height: 40px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0 32px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.update_member_role .member_role_item {
+  color: var(--ds-text, #172b4d);
+  cursor: pointer;
+  display: block;
+  font-weight: 400;
+  margin: 0 -12px;
+  padding: 6px 12px;
+  position: relative;
+}
+.update_member_role .member_role_item span {
+  clear: both;
+  color: var(--ds-text-subtle, #44546f);
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  margin-top: 4px;
+}
+
 .project .project_option {
   width: 300px;
   background-color: var(--ds-surface-overlay, #fff);

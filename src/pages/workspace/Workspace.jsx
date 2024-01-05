@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { UpdateWorkspaceNameApi, DeleteMemberApi, AddMemberApi, UpdateWorkspaceDeletePrivateApi, UpdateWorkspaceDeleteProtectedApi, UpdateWorkspaceDeletePublicApi, UpdateWorkspacePublicApi, UpdateWorkspaceProtectedApi, CreateProjectApi, UpdateWorkspacePrivateApi, UserApi, WorkspaceManagerApi, setProjectId, setWsId, MemberApi } from '../../redux/reducer/trelloReducer';
+import { UpdateMemberRoleApi, UpdateWorkspaceNameApi, DeleteMemberApi, setMember_login, AddMemberApi, UpdateWorkspaceDeletePrivateApi, UpdateWorkspaceDeleteProtectedApi, UpdateWorkspaceDeletePublicApi, UpdateWorkspacePublicApi, UpdateWorkspaceProtectedApi, CreateProjectApi, UpdateWorkspacePrivateApi, UserApi, WorkspaceManagerApi, setProjectId, setWsId, MemberApi } from '../../redux/reducer/trelloReducer';
 import { NavLink } from 'react-router-dom';
 
 export default function Workspace() {
     const dispatch = useDispatch();
-    const { user, workspace_manager, workspace, project, wsId, member_all, member, member_user, background } = useSelector(state => state.trelloReducer)
+    const { user, workspace_manager, member_login, workspace, project, wsId, member_all, member, member_user, background } = useSelector(state => state.trelloReducer)
     const [showLimitCreation, setShowLimitCreation] = useState(false);
     const [showLimitDelete, setShowLimitDelete] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -17,6 +17,11 @@ export default function Workspace() {
     const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(``);
     const [userEmail, setUserEmail] = useState('');
     const [inputValue, setInputValue] = useState('');
+    const [visibleRoleId, setVisibleRoleId] = useState(null);
+
+    const handleToggleRoleItem = (userId) => {
+        setVisibleRoleId(visibleRoleId === userId ? null : userId);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -69,6 +74,12 @@ export default function Workspace() {
     const handleToggleLimitDelete = () => {
         setShowLimitDelete(prevState => !prevState);
     };
+
+    useEffect(() => {
+        dispatch(setMember_login());
+    }, [member]);
+
+    console.log(member_login);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -175,6 +186,7 @@ export default function Workspace() {
             </div>
         </div>
     }
+
 
     const renderWorkspaceOption = () => {
         return member_all.map((m, index) => {
@@ -344,7 +356,7 @@ export default function Workspace() {
     const renderProjectitem = (wsId) => {
         return project.map((p, index) => {
             if (wsId == p.working_space_id) {
-                return <div style={{ backgroundImage: `url(${p.project_background_src})` }} className="project_item col-4">
+                return <div style={{ backgroundImage: `url(${p.project_background_src})`, backgroundSize: "cover" }} className="project_item col-4">
                     <NavLink onClick={() => { handleSetProjectId(p.project_id, p.working_space_id) }} to="/project" className="project_name">
                         {p.project_name}
                     </NavLink>
@@ -358,7 +370,7 @@ export default function Workspace() {
             if (wsId == p.working_space_id) {
                 return <li style={{ backgroundColor: "#fff" }} className="list-group-item-p" aria-current="true">
                     <NavLink to="/project" style={{ color: '#000', textDecoration: 'none' }}>
-                        <img className='me-2' src="./img/logo.png" />
+                        <img className='me-2' src={p.project_background_src} />
                         {p.project_name}
                     </NavLink>
                 </li>
@@ -366,13 +378,37 @@ export default function Workspace() {
         })
     }
 
-    const renderBtnUserRole = (userId) => {
+    const handleRoleChange = async (mb, newRole) => {
+        dispatch(UpdateMemberRoleApi(mb, newRole));
+    };
 
+
+    const renderBtnUserRole = (userId) => {
         return member.map((mb, index) => {
             if (mb.user_id == userId) {
-                return <button key={index} type="button" className="btn btn-primary me-2">
-                    {mb.member_role}
-                </button>
+                const isRoleVisible = visibleRoleId === userId;
+                return <div className='btn_update_member_role' style={{ display: "inline-block" }}>
+                    <button key={index} type="button" className="btn btn-primary  me-2" onClick={() => handleToggleRoleItem(userId)}>
+                        {mb.member_role}
+                    </button>
+                    {isRoleVisible && (
+                        <div className='update_member_role'>
+                            <h4>Chỉnh sửa quyền</h4>
+                            <div className="member_role_item" onClick={() => handleRoleChange(mb, 'Quản trị viên')}>
+                                Quản trị viên
+                                <span>
+                                    Có thể xem, tạo mới và chỉnh sửa các bảng của Không gian làm việc; có thể thay đổi thiết lập Không gian làm việc. Có quyền quản trị viên trong tất cả các bảng trong Không gian làm việc này.
+                                </span>
+                            </div>
+                            <div className="member_role_item" onClick={() => handleRoleChange(mb, 'Bình thường')}>
+                                Bình thường
+                                <span>
+                                    Có thể xem, tạo mới và chỉnh sửa các bảng Không gian làm việc nhưng không được thay đổi thiết lập.
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </div>
             }
         })
     }
@@ -380,7 +416,7 @@ export default function Workspace() {
     const renderMemberList = () => {
         return member_user.map((mu, index) => {
             return member.map((item, index) => {
-                const isAdmin = item.member_role === "Quản trị viên";
+                const isAdmin = member_login.member_role === "Quản trị viên";
                 if (mu.user_id === item.user_id) {
                     return <div key={index} className="member_list mb-3 row">
                         <div className="member_item_left d-flex col">
@@ -394,8 +430,9 @@ export default function Workspace() {
                         </div>
                         <div className="member_item_right col">
                             {renderBtnUserRole(mu.user_id)}
-                            <button type="button" className={`btn ${isAdmin ? "btn-danger" : "btn-secondary"}`}
-                                onClick={isAdmin ? () => { handleLeaveClick(item) } : null}
+                            <button type="button"
+                                className={`btn ${isAdmin ? "btn-danger" : "btn-secondary"}`}
+                                onClick={isAdmin ? () => handleLeaveClick(item) : null}
                                 disabled={!isAdmin}>
                                 <i className="fa fa-times" />
                                 Rời đi
@@ -695,6 +732,12 @@ export default function Workspace() {
                 </div>
             </div>
         </div>
+    }
+
+    const renderChangeBtn = () => {
+        if (member_login.member_role === "Quản trị viên"){
+            return <button type="button" style={{ backgroundColor: "#091e420f", fontWeight: "500" }} class="btn">Thay đổi</button>
+        }
     }
 
     return (

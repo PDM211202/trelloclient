@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateWorkspaceApi, CreateProjectApi, MemberAllApi, WorkspaceApi, MemberApi, BackgroundApi, ProjectApi, setProjectId, setWsId } from '../../redux/reducer/trelloReducer';
+import { GetMemberRoleApi, CreateWorkspaceApi, setMember_login, CreateProjectApi, MemberAllApi, WorkspaceApi, MemberApi, BackgroundApi, ProjectApi, setProjectId, setWsId } from '../../redux/reducer/trelloReducer';
 import { NavLink } from 'react-router-dom';
 
 
 export default function Home() {
-    const { user, workspace, project, member_user, wsId, background, member, member_all } = useSelector(state => state.trelloReducer)
+    const { user, workspace, project, member_user, member_login, wsId, background, member, member_all } = useSelector(state => state.trelloReducer)
     const [showDropdown, setShowDropdown] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [currentBg, setCurrentBg] = useState();
@@ -16,6 +16,9 @@ export default function Home() {
     const [workspaceName, setWorkspaceName] = useState('');
     const [workspaceDescription, setWorkspaceDescription] = useState('');
 
+    console.log("member_login", member_login);
+    console.log("user", user);
+    console.log("member", member);
 
     const handleNameChange = (e) => {
         setWorkspaceName(e.target.value);
@@ -25,8 +28,11 @@ export default function Home() {
         setWorkspaceDescription(e.target.value);
     };
 
+    useEffect(() => {
+        dispatch(setMember_login());
+    }, [member]);
 
-
+    
 
     const handleBgChange = (newBg) => {
         setCurrentBg(newBg);
@@ -183,7 +189,7 @@ export default function Home() {
         return project.map((p, index) => {
             if (wsId == p.working_space_id) {
                 return <li className='workspace-page-content-list-item col-3' key={index}>
-                    <NavLink to="/project" className='project-item' onClick={() => { handleSetProjectId(p.project_id, p.working_space_id) }} style={{ backgroundImage: 'url("https://d2k1ftgv7pobq7.cloudfront.net/images/backgrounds/gradients/crystal.svg")' }}>
+                    <NavLink to="/project" className='project-item' onClick={() => { handleSetProjectId(p.project_id, p.working_space_id) }} style={{ backgroundImage: `url(${p.project_background_src})` }}>
                         <span className='project-item-fade'></span>
                         <div className='project-item-details'>
                             <div className="project-item-details-name">
@@ -383,7 +389,7 @@ export default function Home() {
                             <i className="fa fa-user" />
                             <span>Thành viên</span>
                         </NavLink>
-                        <NavLink onClick={() => handleButtonClick(ws.working_space_id)} to="/workspacemanager" className='workspace-page-content-header-options-item'>
+                        <NavLink onClick={() => handleButtonClick(ws.working_space_id)} to={`/workspacemanager?ws_id=${ws.working_space_id}`} className='workspace-page-content-header-options-item'>
                             <i className="fa fa-cog" />
                             <span>Cài đặt</span>
                         </NavLink>

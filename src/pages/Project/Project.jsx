@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateTaskApi, CreateWorkApi, UpdateProjectNameApi, WorkspaceApi, TaskApi, WorkApi, setProjectId, ProjectApi } from '../../redux/reducer/trelloReducer';
+import { UpdateWorkNameApi, CreateTaskApi, CreateWorkApi, UpdateProjectNameApi, WorkspaceApi, TaskApi, WorkApi, setProjectId, ProjectApi } from '../../redux/reducer/trelloReducer';
 import { NavLink } from 'react-router-dom';
 
 export default function Project() {
     const dispatch = useDispatch();
-    const { wsId, user, work, project, projectId, task } = useSelector(state => state.trelloReducer)
+    const { wsId, user, work, project, projectId, task, member_login } = useSelector(state => state.trelloReducer)
     const [showAddTask, setShowAddTask] = useState({});
     const [showForm, setShowForm] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
@@ -15,8 +15,16 @@ export default function Project() {
     const [editing, setEditing] = useState(false);
 
     const [workName, setWorkName] = useState('');
-
     const [taskName, setTaskName] = useState('');
+    const inputRef = useRef(null);
+    let project_use = null;
+    project.map((item) => {
+        if (item.project_id == projectId){
+            project_use = item;
+        }
+    })
+
+    console.log(project_use);
 
     const handleAddTask = async (wId) => {
         dispatch(CreateTaskApi(wId, taskName));
@@ -128,13 +136,51 @@ export default function Project() {
         })
     }
 
-    const renderListCard = (pId) => {
+    const RenderListCard = (pId) => {
+        const [editingWorkId, setEditingWorkId] = useState(null);
+        const [workNameUpdate, setWorkNameUpdate] = useState("");
+
+        useEffect(() => {
+            // Hàm này sẽ được gọi khi người dùng click ra ngoài input
+            const handleClickOutside = (event) => {
+                if (inputRef.current && !inputRef.current.contains(event.target)) {
+                    // Gọi API cập nhật tên công việc ở đây nếu cần
+                    console.log(editingWorkId, workNameUpdate);
+                    dispatch(UpdateWorkNameApi(editingWorkId, workNameUpdate))
+                    setEditingWorkId(null);
+                }
+            };
+
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, []);
+
         return work.map((w, index) => {
             if (pId == w.project_id) {
+                const isEditing = editingWorkId === w.work_id;
                 return <div key={index} className="card" draggable="true" data-drop-target-for-element="true" work-position style={{ width: '19rem', display: "inline-block" }}>
                     <div className="card-body">
                         <div className="card__header">
-                            <h5 className="card-title" style={{ width: '86%' }}>{w.work_name}</h5>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    className='update_work_name p-1'
+                                    style={{ width: "86%" }}
+                                    value={workNameUpdate}
+                                    onChange={(e) => setWorkNameUpdate(e.target.value)}
+                                    ref={inputRef}
+                                    autoFocus
+                                />
+                            ) : (
+                                <h5 className="card-title" style={{ width: '86%' }} onClick={() => {
+                                    setEditingWorkId(w.work_id);
+                                    setWorkNameUpdate(w.work_name);
+                                }}>
+                                    {w.work_name}
+                                </h5>
+                            )}
                             <i className="fa fa-bars" />
                         </div>
                         <div className="card__content">
@@ -221,7 +267,7 @@ export default function Project() {
                         </div>
                     </div>
                     <div style={{ maxWidth: "1091px" }} className="content__main">
-                        {renderListCard(p.project_id)}
+                        {RenderListCard(p.project_id)}
                         {renderCreateWork()}
                     </div>
                     <div className="modal fade" id="TodoListModal" tabIndex={-1} aria-labelledby="TodoListModalLabel" aria-hidden="true">
@@ -481,7 +527,7 @@ export default function Project() {
             if (wsId == p.working_space_id) {
                 return <li key={index} className="list-group-item-p" aria-current="true">
                     <a onClick={() => { handleSetProjectId(p.project_id) }} style={{ color: '#fff', textDecoration: 'none', cursor: 'pointer' }}>
-                        <img className='me-2' src="./img/logo.png" />
+                        <img className='me-2' src={p.project_background_src} />
                         {p.project_name}
                     </a>
                 </li>
@@ -489,8 +535,18 @@ export default function Project() {
         })
     }
 
+    const renderBtnDeleteProject = () => {
+        if (member_login.member_role === "Quản trị viên") {
+            return <div className="project_option_content_item">
+                <div className="project_option_content_item_delete">
+                    <p style={{ color: "red" }} className='ms-5'>Xóa bảng</p>
+                </div>
+            </div>
+        }
+    }
+
     return (
-        <div className='container-fluid project' style={{ backgroundImage: "url(./img/project_bg_2.jpg)" }}>
+        <div className='container-fluid project' style={{ backgroundImage: `url(${project_use.project_background_src})` }}>
             <div className="row">
                 <nav style={{ color: "#fff" }} className="menu p-0 col">
                     <div className="menu__header">
@@ -516,7 +572,7 @@ export default function Project() {
                         </NavLink>
                         <NavLink style={{ color: "#fff" }} to="/workspacemanager">
                             <div className="menu__mid__item">
-                                <i className="fa fa-user"/>
+                                <i className="fa fa-user" />
                                 <span>Thành viên</span>
                                 <i className="fa fa-plus user__add" />
                             </div>
@@ -574,11 +630,8 @@ export default function Project() {
                                     <p>Thay đổi hình nền</p>
                                 </div>
                             </div>
-                            <div className="project_option_content_item">
-                                <div className="project_option_content_item_delete">
-                                    <p style={{ color: "red" }} className='ms-5'>Xóa bảng</p>
-                                </div>
-                            </div>
+                            {renderBtnDeleteProject()}
+
                         </div>
                     </div>
                 )}
